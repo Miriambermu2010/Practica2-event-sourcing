@@ -61,7 +61,7 @@ public class DatabasePopulator {
 
     private void simulateCarts(int cartsPerCustomer, int additionsPerCart, int removalsPerCart) {
 
-        for(Customer customer: customerController.listCustomers()) {
+     /*   for(Customer customer: customerController.listCustomers()) {
             for (int i = 0; i < cartsPerCustomer; i++) {
                 String cartId = customerController.createCart(customer.getCustomerId());
                 List<String> productIds = new ArrayList<>();
@@ -85,7 +85,7 @@ public class DatabasePopulator {
 
 
             }
-        }
+        }*/
     }
 
     private String getRandomProductId() {

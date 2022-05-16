@@ -4,25 +4,41 @@ import es.urjc.samples.eventsourcing.shoppingcart.persistence.Customer;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.CustomerRepository;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.ShoppingCart;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.ShoppingCartRepository;
-import org.springframework.http.HttpStatus;
+
+import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.axonframework.messaging.responsetypes.ResponseTypes;
+import org.axonframework.queryhandling.QueryGateway;
+
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/customers")
 public class CustomerRestController {
 
+    private final CommandGateway commandGateway;
+    private final QueryGateway queryGateway;
+
+
     private final CustomerRepository repository;
 
     private final ShoppingCartRepository shoppingCartRepository;
 
-    public CustomerRestController(CustomerRepository repository, ShoppingCartRepository shoppingCartRepository) {
+    public CustomerRestController(CustomerRepository repository,ShoppingCartRepository shoppingCartRepository, CommandGateway commandGateway, QueryGateway queryGateway) {
+
         this.repository = repository;
         this.shoppingCartRepository = shoppingCartRepository;
+
+        this.commandGateway = commandGateway;
+        this.queryGateway = queryGateway;
     }
+
 
     @PostMapping
     public String createCustomer(@RequestBody Customer customer) {
@@ -35,15 +51,16 @@ public class CustomerRestController {
         return customer.getCustomerId();
     }
 
+ 
     @GetMapping
-    public List<Customer> listCustomers() {
-        return repository.findAll();
+    public CompletableFuture<List<Customer>> listCustomer(){
+
+        return queryGateway.query(new GetAllCustomerQuery(), ResponseTypes.multipleInstancesOf(Customer.class));
     }
 
     @GetMapping("/{customerId}")
-    public Customer getCustomer(@PathVariable String customerId) {
-        return repository.findById(customerId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "customer " + customerId));
+    public CompletableFuture<Customer> getCustomer(@PathVariable String customerId) {
+        return queryGateway.query(new GetCustomerQuery(customerId), ResponseTypes.instanceOf(Customer.class));
     }
 
     @PostMapping("/{customerId}/cart")

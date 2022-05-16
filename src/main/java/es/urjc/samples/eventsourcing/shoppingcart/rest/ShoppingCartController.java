@@ -3,32 +3,44 @@ package es.urjc.samples.eventsourcing.shoppingcart.rest;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.CartItem;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.ShoppingCart;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.ShoppingCartRepository;
+
+import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.axonframework.messaging.responsetypes.ResponseType;
+import org.axonframework.messaging.responsetypes.ResponseTypes;
+import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/carts")
 public class ShoppingCartController {
 
+
+    private final CommandGateway commandGateway;
+    private final QueryGateway queryGateway;
     private final ShoppingCartRepository repository;
 
-    public ShoppingCartController(ShoppingCartRepository repository) {
+    public ShoppingCartController(ShoppingCartRepository repository, CommandGateway commandGateway, QueryGateway queryGateway) {
         this.repository = repository;
+        this.commandGateway = commandGateway;
+        this.queryGateway = queryGateway;
     }
 
+
     @GetMapping
-    public List<ShoppingCart> listAllCarts(){
-        return repository.findAll();
+    public CompletableFuture<List<ShoppingCart>> listAllCarts(){
+
+        return queryGateway.query(new GetAllShoppingCartQuery(), ResponseTypes.multipleInstancesOf(ShoppingCart.class));
     }
 
     @GetMapping("/{cartId}")
-    public ShoppingCart getCart(@PathVariable String cartId) {
-        return repository.findById(cartId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Shopping Cart " + cartId));
+    public CompletableFuture<ShoppingCart> getCart(@PathVariable String cartId) {
+        return queryGateway.query(new GetCartQuery(cartId), ResponseTypes.instanceOf(ShoppingCart.class));
     }
 
     @PostMapping("/{cartId}/product/{productId}")
