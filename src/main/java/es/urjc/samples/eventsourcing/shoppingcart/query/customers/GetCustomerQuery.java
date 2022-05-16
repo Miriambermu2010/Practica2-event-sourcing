@@ -1,4 +1,4 @@
-package es.urjc.samples.eventsourcing.shoppingcart.rest;
+package es.urjc.samples.eventsourcing.shoppingcart.query.customers;
 
 public class GetCustomerQuery {
     String customerId;

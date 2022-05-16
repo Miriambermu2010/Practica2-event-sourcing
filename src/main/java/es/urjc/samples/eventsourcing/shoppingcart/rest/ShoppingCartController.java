@@ -3,6 +3,8 @@ package es.urjc.samples.eventsourcing.shoppingcart.rest;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.CartItem;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.ShoppingCart;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.ShoppingCartRepository;
+import es.urjc.samples.eventsourcing.shoppingcart.query.cart.GetAllShoppingCartQuery;
+import es.urjc.samples.eventsourcing.shoppingcart.query.cart.GetCartQuery;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.messaging.responsetypes.ResponseType;

@@ -1,4 +1,4 @@
-package es.urjc.samples.eventsourcing.shoppingcart;
+package es.urjc.samples.eventsourcing.shoppingcart.query.customers;
 
 import java.util.List;
 import org.axonframework.queryhandling.QueryHandler;
@@ -9,10 +9,6 @@ import org.springframework.web.server.ResponseStatusException;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.CartItem;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.Customer;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.CustomerRepository;
-import es.urjc.samples.eventsourcing.shoppingcart.rest.GetAllCustomerQuery;
-import es.urjc.samples.eventsourcing.shoppingcart.rest.GetCustomerQuery;
-
-import es.urjc.samples.eventsourcing.shoppingcart.rest.GetProductQuery;
 
 
 @Component

@@ -4,6 +4,8 @@ import es.urjc.samples.eventsourcing.shoppingcart.persistence.Customer;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.CustomerRepository;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.ShoppingCart;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.ShoppingCartRepository;
+import es.urjc.samples.eventsourcing.shoppingcart.query.customers.GetAllCustomerQuery;
+import es.urjc.samples.eventsourcing.shoppingcart.query.customers.GetCustomerQuery;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.messaging.responsetypes.ResponseTypes;

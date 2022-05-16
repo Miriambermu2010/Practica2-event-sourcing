@@ -1,4 +1,4 @@
-package es.urjc.samples.eventsourcing.shoppingcart;
+package es.urjc.samples.eventsourcing.shoppingcart.query.cart;
 
 import java.util.List;
 
@@ -9,8 +9,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.ShoppingCart;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.ShoppingCartRepository;
-import es.urjc.samples.eventsourcing.shoppingcart.rest.GetAllShoppingCartQuery;
-import es.urjc.samples.eventsourcing.shoppingcart.rest.GetCartQuery;
 
 @Component
 public class CartHandler {
