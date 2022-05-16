@@ -1,10 +1,10 @@
 package es.urjc.samples.eventsourcing.shoppingcart.rest;
 
+import es.urjc.samples.eventsourcing.shoppingcart.command.products.AddProductCommand;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.Product;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.ProductRepository;
-import es.urjc.samples.eventsourcing.shoppingcart.query.products.AddProductCommand;
-import es.urjc.samples.eventsourcing.shoppingcart.query.products.GetAllProductQuery;
-import es.urjc.samples.eventsourcing.shoppingcart.query.products.GetProductQuery;
+import es.urjc.samples.eventsourcing.shoppingcart.query.product.GetAllProductQuery;
+import es.urjc.samples.eventsourcing.shoppingcart.query.product.GetProductQuery;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;

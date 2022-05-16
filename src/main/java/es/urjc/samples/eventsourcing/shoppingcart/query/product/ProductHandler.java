@@ -1,4 +1,4 @@
-package es.urjc.samples.eventsourcing.shoppingcart.query.products;
+package es.urjc.samples.eventsourcing.shoppingcart.query.product;
 import java.util.List;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.http.HttpStatus;

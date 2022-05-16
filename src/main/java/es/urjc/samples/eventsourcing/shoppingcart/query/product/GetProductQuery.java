@@ -1,4 +1,4 @@
-package es.urjc.samples.eventsourcing.shoppingcart.query.products;
+package es.urjc.samples.eventsourcing.shoppingcart.query.product;
 
 public class GetProductQuery {
     String productId;

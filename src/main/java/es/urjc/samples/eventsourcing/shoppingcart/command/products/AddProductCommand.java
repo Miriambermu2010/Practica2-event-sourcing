@@ -1,4 +1,4 @@
-package es.urjc.samples.eventsourcing.shoppingcart.query.products;
+package es.urjc.samples.eventsourcing.shoppingcart.command.products;
 
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;

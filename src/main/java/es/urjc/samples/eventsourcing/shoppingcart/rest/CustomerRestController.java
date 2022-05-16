@@ -1,11 +1,13 @@
 package es.urjc.samples.eventsourcing.shoppingcart.rest;
 
-import es.urjc.samples.eventsourcing.shoppingcart.persistence.Customer;
-import es.urjc.samples.eventsourcing.shoppingcart.persistence.CustomerRepository;
+import es.urjc.samples.eventsourcing.shoppingcart.command.customers.CreateCardCommand;
+import es.urjc.samples.eventsourcing.shoppingcart.command.customers.CreateCustomerCommand;
+import es.urjc.samples.eventsourcing.shoppingcart.persistence.CustomerEntity;
+import es.urjc.samples.eventsourcing.shoppingcart.persistence.CustomerEntityRepository;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.ShoppingCart;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.ShoppingCartRepository;
-import es.urjc.samples.eventsourcing.shoppingcart.query.customers.GetAllCustomerQuery;
-import es.urjc.samples.eventsourcing.shoppingcart.query.customers.GetCustomerQuery;
+import es.urjc.samples.eventsourcing.shoppingcart.query.customer.GetAllCustomerQuery;
+import es.urjc.samples.eventsourcing.shoppingcart.query.customer.GetCustomerQuery;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
@@ -28,11 +30,11 @@ public class CustomerRestController {
     private final QueryGateway queryGateway;
 
 
-    private final CustomerRepository repository;
+    private final CustomerEntityRepository repository;
 
     private final ShoppingCartRepository shoppingCartRepository;
 
-    public CustomerRestController(CustomerRepository repository,ShoppingCartRepository shoppingCartRepository, CommandGateway commandGateway, QueryGateway queryGateway) {
+    public CustomerRestController(CustomerEntityRepository repository,ShoppingCartRepository shoppingCartRepository, CommandGateway commandGateway, QueryGateway queryGateway) {
 
         this.repository = repository;
         this.shoppingCartRepository = shoppingCartRepository;
@@ -43,36 +45,31 @@ public class CustomerRestController {
 
 
     @PostMapping
-    public String createCustomer(@RequestBody Customer customer) {
-        if (customer.getCustomerId() == null) {
-            customer.setCustomerId(UUID.randomUUID().toString());
-        }
-
-        repository.save(customer);
-
-        return customer.getCustomerId();
+    public String createCustomer(@RequestBody CustomerDto customer) {
+        String id = customer.getCustomerId() != null ? customer.getCustomerId() : UUID.randomUUID().toString();
+        CreateCustomerCommand command = new CreateCustomerCommand(id, customer.getFullName(), customer.getAddress());
+        commandGateway.send(command);
+        return id;
     }
 
  
     @GetMapping
-    public CompletableFuture<List<Customer>> listCustomer(){
+    public CompletableFuture<List<CustomerEntity>> listCustomer(){
 
-        return queryGateway.query(new GetAllCustomerQuery(), ResponseTypes.multipleInstancesOf(Customer.class));
+        return queryGateway.query(new GetAllCustomerQuery(), ResponseTypes.multipleInstancesOf(CustomerEntity.class));
     }
 
     @GetMapping("/{customerId}")
-    public CompletableFuture<Customer> getCustomer(@PathVariable String customerId) {
-        return queryGateway.query(new GetCustomerQuery(customerId), ResponseTypes.instanceOf(Customer.class));
+    public CompletableFuture<CustomerEntity> getCustomer(@PathVariable String customerId) {
+        return queryGateway.query(new GetCustomerQuery(customerId), ResponseTypes.instanceOf(CustomerEntity.class));
     }
 
     @PostMapping("/{customerId}/cart")
-    public String createCart(@PathVariable String customerId) {
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setCartId(UUID.randomUUID().toString());
-        shoppingCart.setCustomerId(customerId);
-        shoppingCartRepository.save(shoppingCart);
-
-        return shoppingCart.getCartId();
+    public String createCart(@PathVariable String customerId) {        
+        String cardId = UUID.randomUUID().toString();
+        CreateCardCommand command = new CreateCardCommand(customerId, cardId);
+        commandGateway.send(command);
+        return cardId;
     }
 
 

@@ -4,17 +4,17 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Customer {
+public class CustomerEntity {
 
     @Id
     private String customerId;
     private String fullName;
     private String address;
 
-    public Customer() {
+    public CustomerEntity() {
     }
 
-    public Customer(String customerId, String fullName, String address) {
+    public CustomerEntity(String customerId, String fullName, String address) {
         this.customerId = customerId;
         this.fullName = fullName;
         this.address = address;

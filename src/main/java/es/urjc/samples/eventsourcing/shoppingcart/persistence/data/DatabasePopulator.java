@@ -1,10 +1,12 @@
 package es.urjc.samples.eventsourcing.shoppingcart.persistence.data;
 
 import com.github.javafaker.Faker;
-import es.urjc.samples.eventsourcing.shoppingcart.persistence.Customer;
+
+import es.urjc.samples.eventsourcing.shoppingcart.persistence.CustomerEntity;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.Product;
-import es.urjc.samples.eventsourcing.shoppingcart.query.customers.CustomerHandler;
-import es.urjc.samples.eventsourcing.shoppingcart.query.customers.GetAllCustomerQuery;
+import es.urjc.samples.eventsourcing.shoppingcart.query.customer.CustomerHandler;
+import es.urjc.samples.eventsourcing.shoppingcart.query.customer.GetAllCustomerQuery;
+import es.urjc.samples.eventsourcing.shoppingcart.rest.CustomerDto;
 import es.urjc.samples.eventsourcing.shoppingcart.rest.CustomerRestController;
 import es.urjc.samples.eventsourcing.shoppingcart.rest.ProductRestController;
 import es.urjc.samples.eventsourcing.shoppingcart.rest.ShoppingCartController;
@@ -47,9 +49,9 @@ public class DatabasePopulator {
 
     private void createCustomers() {
         Stream.of(
-                new Customer("dgomezg", "David Gómez G.", "Unknown"),
-                new Customer("patxi", "Patxi Gortazar", "Unknown"),
-                new Customer("mica", "Micael Gallego", "Unknown")
+                new CustomerDto("dgomezg", "David Gómez G.", "Unknown"),
+                new CustomerDto("patxi", "Patxi Gortazar", "Unknown"),
+                new CustomerDto("mica", "Micael Gallego", "Unknown")
         ).forEach(customerController::createCustomer);
     }
 
@@ -68,7 +70,7 @@ public class DatabasePopulator {
 
     private void simulateCarts(int cartsPerCustomer, int additionsPerCart, int removalsPerCart) {
 
-        for(Customer customer: customerHandler.handleListQuery(new GetAllCustomerQuery())) {
+        for(CustomerEntity customer: customerHandler.handleListQuery(new GetAllCustomerQuery())) {
             for (int i = 0; i < cartsPerCustomer; i++) {
                 String cartId = customerController.createCart(customer.getCustomerId());
                 List<String> productIds = new ArrayList<>();
