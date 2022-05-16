@@ -3,9 +3,6 @@ package es.urjc.samples.eventsourcing.shoppingcart.rest;
 import es.urjc.samples.eventsourcing.shoppingcart.command.customers.CreateCardCommand;
 import es.urjc.samples.eventsourcing.shoppingcart.command.customers.CreateCustomerCommand;
 import es.urjc.samples.eventsourcing.shoppingcart.persistence.CustomerEntity;
-import es.urjc.samples.eventsourcing.shoppingcart.persistence.CustomerEntityRepository;
-import es.urjc.samples.eventsourcing.shoppingcart.persistence.ShoppingCart;
-import es.urjc.samples.eventsourcing.shoppingcart.persistence.ShoppingCartRepository;
 import es.urjc.samples.eventsourcing.shoppingcart.query.customer.GetAllCustomerQuery;
 import es.urjc.samples.eventsourcing.shoppingcart.query.customer.GetCustomerQuery;
 
@@ -29,16 +26,7 @@ public class CustomerRestController {
     private final CommandGateway commandGateway;
     private final QueryGateway queryGateway;
 
-
-    private final CustomerEntityRepository repository;
-
-    private final ShoppingCartRepository shoppingCartRepository;
-
-    public CustomerRestController(CustomerEntityRepository repository,ShoppingCartRepository shoppingCartRepository, CommandGateway commandGateway, QueryGateway queryGateway) {
-
-        this.repository = repository;
-        this.shoppingCartRepository = shoppingCartRepository;
-
+    public CustomerRestController(CommandGateway commandGateway, QueryGateway queryGateway) {
         this.commandGateway = commandGateway;
         this.queryGateway = queryGateway;
     }
